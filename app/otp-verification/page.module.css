@@ -41,7 +41,7 @@
     font-weight: 550;
     color: var(--text-color-2);
     margin-bottom: 5px;
-    font-family: var(--font-noto-serif);
+    /* font-family: var(--font-noto-serif); */
 }
 
 .subtitle {
