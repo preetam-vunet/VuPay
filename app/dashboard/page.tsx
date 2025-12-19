@@ -82,7 +82,7 @@ export default function DashboardPage() {
                 <div className={styles.actions}>
                     <button
                         className={styles.actionButton}
-                        onClick={() => router.push("/transaction")}
+                        onClick={() => router.push("/dashboard/transaction")}
                     >
                         Make Transaction
                     </button>

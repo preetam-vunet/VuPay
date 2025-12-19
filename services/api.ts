@@ -96,3 +96,26 @@ export const getAccountDetails = async (token: string, phone: string) => {
         return { success: false, message: "An error occurred." };
     }
 };
+
+export const initiatePayment = async (token: string, paymentData: any) => {
+    try {
+        const response = await fetch("https://216.48.191.10:8443/payment/initiate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(paymentData),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return { success: true, data };
+        } else {
+            return { success: false, message: "Payment initiation failed." };
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        return { success: false, message: "An error occurred." };
+    }
+};
