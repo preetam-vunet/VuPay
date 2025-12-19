@@ -1,0 +1,74 @@
+export const loginUser = async (phone_number: string, password: string) => {
+    try {
+        const response = await fetch("https://216.48.191.10:8443/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                phone_number,
+                password,
+            }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return { success: true, data };
+        } else {
+            return { success: false, message: "Login failed." };
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        return { success: false, message: "An error occurred." };
+    }
+};
+
+export const verifyOtp = async (transaction_id: string, otp: string) => {
+    try {
+        const response = await fetch("https://216.48.191.10:8443/auth/verify-otp", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                transaction_id,
+                otp,
+            }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return { success: true, data };
+        } else {
+            return { success: false, message: "OTP verification failed." };
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        return { success: false, message: "An error occurred." };
+    }
+};
+
+export const getAccountDetails = async (token: string, phone: string) => {
+    try {
+        const response = await fetch("https://216.48.191.10:8443/account", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            // body: JSON.stringify({
+            //     phone
+            // }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return { success: true, data };
+        } else {
+            return { success: false, message: "Failed to fetch account details." };
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        return { success: false, message: "An error occurred." };
+    }
+};
