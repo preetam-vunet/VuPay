@@ -11,9 +11,11 @@ export default function LoginPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     setMessage("Sending...");
 
     const result = await loginUser(phoneNumber, password);
@@ -24,8 +26,10 @@ export default function LoginPage() {
       localStorage.setItem("transactionId", result.data.transaction_id);
       localStorage.setItem("phoneNumber", phoneNumber);
       router.push("/otp-verification");
+      // Keep loading true while redirecting
     } else {
       setMessage(result.message || "Login failed.");
+      setIsLoading(false);
     }
   };
 
@@ -58,7 +62,14 @@ export default function LoginPage() {
                 className={styles.input}
               />
             </div>
-            <button type="submit" className={styles.button}>Login</button>
+            <button
+              type="submit"
+              className={styles.button}
+              disabled={isLoading}
+              style={{ pointerEvents: isLoading ? "none" : "auto" }}
+            >
+              {isLoading ? <span className={styles.spinner}></span> : "Login"}
+            </button>
           </form>
           {/* {message && <p className={styles.message} style={{ marginTop: "1rem" }}>{message}</p>} */}
         </div>
