@@ -1,13 +1,76 @@
-.container {
-    width: 100%;
-    height: 100%;
+.dashboardContainer {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background-color);
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--login-background-color);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    /* Or just simple border if needed, but var(--login-background-color) is usually dark/light specific */
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    padding-left: 10px;
+}
+
+.logoText {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-color-2);
+    font-family: var(--font-noto-serif);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.navItem {
+    padding: 12px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-color-2);
+    opacity: 0.7;
+    transition: all 0.2s;
+    text-transform: capitalize;
+}
+
+.navItem:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.activeNavItem {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Or appropriate active color based on theme */
+    opacity: 1;
+    font-weight: 600;
+    /* border-left: 3px solid var(--text-color-2); */
+}
+
+.mainContent {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--background-color);
     padding: 20px;
+    background-color: var(--background-color);
 }
 
+/* Existing Card Styles reused */
 .card {
     background: var(--login-background-color);
     padding: 40px;
@@ -28,12 +91,14 @@
     font-size: 18px;
     color: var(--text-color-2);
     margin-bottom: 5px;
+    font-weight: 400;
 }
 
 .userName {
     font-size: 32px;
     font-weight: 600;
     color: var(--text-color-2);
+    font-family: var(--font-noto-serif);
 }
 
 .balanceCard {
@@ -41,6 +106,7 @@
     padding: 25px;
     border-radius: 12px;
     color: #fff;
+    /* Keep this white as it's on dark gradient */
     position: relative;
     overflow: hidden;
 }
