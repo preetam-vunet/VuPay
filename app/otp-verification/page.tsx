@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { verifyOtp, getAccountDetails } from "../../services/api";
+import { verifyOtp, getAccountDetails, resendOtp } from "../../services/api";
 import styles from "./page.module.css";
 
 export default function OtpPage() {
@@ -13,6 +13,21 @@ export default function OtpPage() {
     const [otp, setOtp] = useState("");
     const [message, setMessage] = useState("");
 
+    const [timer, setTimer] = useState(60);
+    const [canResend, setCanResend] = useState(false);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        } else {
+            setCanResend(true);
+        }
+        return () => clearInterval(interval);
+    }, [timer]);
+
     useEffect(() => {
         const storedTransactionId = localStorage.getItem("transactionId");
         if (storedTransactionId) {
@@ -21,6 +36,23 @@ export default function OtpPage() {
             setMessage("Transaction ID not found. Please login again.");
         }
     }, []);
+
+    const handleResendOtp = async () => {
+        if (!transactionId) return;
+
+        setCanResend(false);
+        setTimer(60);
+        setMessage("Resending OTP...");
+
+        const result = await resendOtp(transactionId);
+        if (result.success) {
+            setMessage("OTP Resent Successfully!");
+        } else {
+            setMessage(result.message || "Failed to resend OTP.");
+            setCanResend(true); // Allow retry immediately if failed
+            setTimer(0);
+        }
+    };
 
     const handleOtpSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -81,6 +113,27 @@ export default function OtpPage() {
                         </div>
                         <button type="submit" className={styles.button}>Verify OTP</button>
                     </form>
+
+                    <div style={{ textAlign: "center", color: "var(--text-color-2)" }}>
+                        {canResend ? (
+                            <button
+                                onClick={handleResendOtp}
+                                style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: "var(--text-color-2)",
+                                    textDecoration: "underline",
+                                    cursor: "pointer",
+                                    fontSize: "16px"
+                                }}
+                            >
+                                Resend OTP
+                            </button>
+                        ) : (
+                            <span>Resend OTP in {timer}s</span>
+                        )}
+                    </div>
+
                     {/* {message && <p className={styles.message} style={{ marginTop: "1rem" }}>{message}</p>} */}
                 </div>
             </div>
