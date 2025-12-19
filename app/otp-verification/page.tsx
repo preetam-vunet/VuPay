@@ -15,6 +15,7 @@ export default function OtpPage() {
 
     const [timer, setTimer] = useState(60);
     const [canResend, setCanResend] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -61,6 +62,7 @@ export default function OtpPage() {
             return;
         }
 
+        setIsLoading(true);
         setMessage("Verifying OTP...");
 
         const result = await verifyOtp(transactionId, otp);
@@ -88,6 +90,7 @@ export default function OtpPage() {
             router.push("/account-selection");
         } else {
             setMessage(result.message || "Verification failed.");
+            setIsLoading(false);
         }
     };
 
@@ -111,7 +114,14 @@ export default function OtpPage() {
                                 className={styles.input}
                             />
                         </div>
-                        <button type="submit" className={styles.button}>Verify OTP</button>
+                        <button
+                            type="submit"
+                            className={styles.button}
+                            disabled={isLoading}
+                            style={{ pointerEvents: isLoading ? "none" : "auto" }}
+                        >
+                            {isLoading ? <span className={styles.spinner}></span> : "Verify OTP"}
+                        </button>
                     </form>
 
                     <div style={{ textAlign: "center", color: "var(--text-color-2)" }}>
