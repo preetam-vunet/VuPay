@@ -118,6 +118,7 @@
 
 .message {
     /* Add message styles here */
+    color: black;
 }
 
 .spinner {
