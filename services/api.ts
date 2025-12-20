@@ -146,3 +146,30 @@ export const verifyAccountPassword = async (phone_number: string, account_number
         return { success: false, message: "An error occurred." };
     }
 };
+
+export const getTransactions = async (token: string, phoneNumber: string) => {
+    try {
+        const response = await fetch("https://216.48.191.10:8443/transactions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                // phoneNumber,
+                limit: 10,
+                offset: 0
+            }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return { success: true, data };
+        } else {
+            return { success: false, message: "Failed to fetch transactions." };
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        return { success: false, message: "An error occurred." };
+    }
+};

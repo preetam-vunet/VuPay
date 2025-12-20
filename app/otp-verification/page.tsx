@@ -94,14 +94,20 @@ export default function OtpPage() {
                     const paymentResult = await initiatePayment(token, payload);
                     if (paymentResult.success) {
                         setMessage(paymentResult.data.message || "Payment Successful!");
+
+                        // Store txnRef for status page
+                        if (paymentResult.data.txnRef) {
+                            localStorage.setItem("currentTxnRef", paymentResult.data.txnRef);
+                        }
+
                         // Clear transaction data
                         localStorage.removeItem("paymentPayload");
                         localStorage.removeItem("flowType");
                         localStorage.removeItem("transactionId");
 
                         setTimeout(() => {
-                            router.push("/dashboard");
-                        }, 2000);
+                            router.push("/txn-status");
+                        }, 1000);
                     } else {
                         setMessage(paymentResult.message || "Payment Failed.");
                         setIsLoading(false);

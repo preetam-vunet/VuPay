@@ -101,7 +101,7 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    color: var(--login-background-color);
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
