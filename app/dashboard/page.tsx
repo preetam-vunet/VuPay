@@ -157,7 +157,7 @@ export default function DashboardPage() {
                                 </button>
                                 <button
                                     className={styles.actionButton}
-                                    onClick={() => router.push("/dashboard/transaction")}
+                                // onClick={() => router.push("/dashboard/transaction")}
                                 >
                                     Receive Money
                                 </button>
