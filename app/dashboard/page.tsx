@@ -40,6 +40,25 @@ export default function DashboardPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("dashboard");
 
+    const [showUserMenu, setShowUserMenu] = useState(false);
+
+    const handleLogout = () => {
+        // Clear session cookie
+        document.cookie = "session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+        // Clear local storage
+        localStorage.removeItem("transactionId");
+        localStorage.removeItem("currentTransactionId");
+        localStorage.removeItem("phoneNumber");
+        localStorage.removeItem("selectedAccount");
+        localStorage.removeItem("paymentPayload");
+        localStorage.removeItem("flowType");
+        localStorage.removeItem("currentTxnRef");
+
+        // Redirect to login
+        router.push("/login");
+    };
+
     useEffect(() => {
         const storedAccount = localStorage.getItem("selectedAccount");
         if (storedAccount) {
@@ -107,12 +126,25 @@ export default function DashboardPage() {
                                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                             </svg>
                         </button>
-                        <button className={styles.iconButton} aria-label="User Profile">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg>
-                        </button>
+                        <div style={{ position: 'relative' }}>
+                            <button
+                                className={styles.iconButton}
+                                aria-label="User Profile"
+                                onClick={() => setShowUserMenu(!showUserMenu)}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </button>
+                            {showUserMenu && (
+                                <div className={styles.dropdownMenu}>
+                                    <div className={styles.dropdownItem} onClick={handleLogout}>
+                                        Logout
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </header>
 
