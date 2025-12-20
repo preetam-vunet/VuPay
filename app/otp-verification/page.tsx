@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { verifyOtp, getAccountDetails, resendOtp } from "../../services/api";
+import { verifyOtp, getAccountDetails, resendOtp, initiatePayment } from "../../services/api";
 import styles from "./page.module.css";
 
 export default function OtpPage() {
@@ -66,28 +66,77 @@ export default function OtpPage() {
         setMessage("Verifying OTP...");
 
         const result = await verifyOtp(transactionId, otp);
+        const flowType = localStorage.getItem("flowType");
 
         if (result.success && result.data?.success) {
-            setMessage("OTP Verified Successfully! Fetching account details...");
-            console.log("OTP Verification Success:", result.data);
+            if (flowType === "transaction") {
+                setMessage("OTP Verified. Processing Payment...");
 
-            const accessToken = result.data.access_token;
-            const expiresIn = result.data.expires_in;
+                const payloadStr = localStorage.getItem("paymentPayload");
+                if (!payloadStr) {
+                    setMessage("Payment details missing.");
+                    setIsLoading(false);
+                    return;
+                }
 
-            // Store token in a cookie
-            document.cookie = `session_token=${accessToken}; max-age=${expiresIn}; path=/; Secure; SameSite=Strict`;
+                try {
+                    const payload = JSON.parse(payloadStr);
+                    // Retrieve token from cookie
+                    const tokenMatch = document.cookie.match(/session_token=([^;]+)/);
+                    const token = tokenMatch ? tokenMatch[1] : null;
 
-            // Retrieve phone number and fetch account details
-            const phoneNumber = localStorage.getItem("phoneNumber");
-            if (phoneNumber) {
-                const accountResult = await getAccountDetails(accessToken, phoneNumber);
-                console.log("Account Details:", accountResult);
+                    if (!token) {
+                        setMessage("Session expired. Please login again.");
+                        setIsLoading(false);
+                        return;
+                    }
+
+                    const paymentResult = await initiatePayment(token, payload);
+                    if (paymentResult.success) {
+                        setMessage(paymentResult.data.message || "Payment Successful!");
+                        // Clear transaction data
+                        localStorage.removeItem("paymentPayload");
+                        localStorage.removeItem("flowType");
+                        localStorage.removeItem("transactionId");
+
+                        setTimeout(() => {
+                            router.push("/dashboard");
+                        }, 2000);
+                    } else {
+                        setMessage(paymentResult.message || "Payment Failed.");
+                        setIsLoading(false);
+                    }
+                } catch (e) {
+                    setMessage("Invalid payment data.");
+                    setIsLoading(false);
+                }
+
             } else {
-                console.error("Phone number not found in localStorage");
-            }
+                // Login Flow
+                setMessage("OTP Verified Successfully! Fetching account details...");
+                console.log("OTP Verification Success:", result.data);
 
-            // Redirect to account selection
-            router.push("/account-selection");
+                const accessToken = result.data.access_token;
+                const expiresIn = result.data.expires_in;
+
+                // Store token in a cookie
+                document.cookie = `session_token=${accessToken}; max-age=${expiresIn}; path=/; Secure; SameSite=Strict`;
+
+                // Retrieve phone number and fetch account details
+                const phoneNumber = localStorage.getItem("phoneNumber");
+                if (phoneNumber) {
+                    const accountResult = await getAccountDetails(accessToken, phoneNumber);
+                    console.log("Account Details:", accountResult);
+                } else {
+                    console.error("Phone number not found in localStorage");
+                }
+
+                // Clear flow type
+                localStorage.removeItem("flowType");
+
+                // Redirect to account selection
+                router.push("/account-selection");
+            }
         } else {
             setMessage(result.message || "Verification failed.");
             setIsLoading(false);

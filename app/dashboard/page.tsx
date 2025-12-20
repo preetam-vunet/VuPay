@@ -6,7 +6,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 // Importing icon assuming it's supported by Next.js configuration or treating it as static
 import IconKey from "../icon.svg";
-import { PieChart, Pie, Cell, LineChart, Line, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, LineChart, Line, XAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const pieData = [
     { name: 'Rent', value: 400 },
@@ -118,7 +118,7 @@ export default function DashboardPage() {
 
                 {activeTab === 'dashboard' ? (
                     <div className={styles.dashboardGrid}>
-                        <div className={styles.card}>
+                        <div className={`${styles.card} ${styles.fullWidthCard}`}>
                             <div className={styles.balanceCard}>
                                 <div className={styles.balanceLabel}>Total Balance</div>
                                 <div className={styles.balanceRow}>
@@ -155,13 +155,19 @@ export default function DashboardPage() {
                                 >
                                     Fund Transfer
                                 </button>
+                                <button
+                                    className={styles.actionButton}
+                                    onClick={() => router.push("/dashboard/transaction")}
+                                >
+                                    Receive Money
+                                </button>
                             </div>
                         </div>
 
-                        {/* <div className={styles.card}>
+                        <div className={styles.card}>
                             <h3 className={styles.cardTitle}>Monthly Expenses</h3>
-                            <div style={{ width: '100%', height: '100%', minHeight: '200px' }}>
-                                <ResponsiveContainer width="100%" height={200}>
+                            <div className={styles.chartContainer}>
+                                <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
                                             data={pieData}
@@ -175,6 +181,7 @@ export default function DashboardPage() {
                                             ))}
                                         </Pie>
                                         <Tooltip />
+                                        <Legend />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
@@ -182,13 +189,13 @@ export default function DashboardPage() {
 
                         <div className={styles.card}>
                             <h3 className={styles.cardTitle}>Activity Trend</h3>
-                            <div style={{ width: '100%', height: '100%', minHeight: '200px' }}>
+                            <div className={styles.chartContainer}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <LineChart data={lineData}>
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.1)" />
                                         <XAxis
                                             dataKey="name"
-                                            axisLine={false}
+                                            axisLine={true}
                                             tickLine={false}
                                             style={{ fontSize: '12px', fill: 'var(--text-color-2)' }}
                                         />
@@ -206,7 +213,7 @@ export default function DashboardPage() {
                                     </LineChart>
                                 </ResponsiveContainer>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 ) : (
                     null

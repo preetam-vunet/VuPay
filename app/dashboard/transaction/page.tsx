@@ -81,15 +81,24 @@ export default function TransactionPage() {
         const result = await verifyAccountPassword(phoneNumber, account.account_number, password, token);
 
         if (result.success) {
-            // If transaction_id is present, use it. If not, we might still want to proceed 
-            // if the user expects an OTP flow. However, without a transaction_id, 
-            // the OTP page might not work unless it handles missing IDs or uses a different mechanism.
-            // For now, based on user request, we will route to the OTP page.
-            // We'll store the transaction ID (if any) or context in localStorage if needed by the other page.
-
+            // Store transaction context for the OTP page
             if (result.data?.transaction_id) {
-                localStorage.setItem("currentTransactionId", result.data.transaction_id);
+                localStorage.setItem("transactionId", result.data.transaction_id);
             }
+
+            // Prepare payment payload for the next step
+            const payload = {
+                userId: account.account_holder_name,
+                accountNo: account.account_number,
+                type: "Digital Transfer",
+                amount: parseFloat(amount),
+                channel: "BROWSER",
+                beneficiaryName: beneficiaryName,
+                beneficiaryAccount: beneficiaryAccount
+            };
+
+            localStorage.setItem("paymentPayload", JSON.stringify(payload));
+            localStorage.setItem("flowType", "transaction");
 
             // Redirect to the dedicated OTP verification page
             router.push("/otp-verification");
