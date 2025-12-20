@@ -199,7 +199,7 @@ export default function OtpPage() {
                         )}
                     </div>
 
-                    {message && <p className={styles.message} style={{ marginTop: "1rem" }}>{message}</p>}
+                    {message && <p className={styles.message} style={{ marginTop: "1rem", color: "black" }}>{message}</p>}
                 </div>
             </div>
             <div className={styles.view}>
