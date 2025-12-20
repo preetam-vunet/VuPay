@@ -157,6 +157,10 @@ export default function DashboardPage() {
                                 </button>
                                 <button
                                     className={styles.actionButton}
+                                    style={{
+                                        cursor: "not-allowed",
+                                        pointerEvents: "none",
+                                    }}
                                 // onClick={() => router.push("/dashboard/transaction")}
                                 >
                                     Receive Money
