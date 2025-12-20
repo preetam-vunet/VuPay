@@ -97,7 +97,7 @@ export default function AccountSelectionPage() {
                                 >
                                     <div className={styles.accountHeader}>
                                         <span className={styles.accountName}>{acc.account_holder_name}</span>
-                                        <span className={styles.accountBalance}>${acc.balance.toLocaleString()}</span>
+                                        <span className={styles.accountBalance}>₹{acc.balance.toLocaleString()}</span>
                                     </div>
                                     <div className={styles.accountNumber}>
                                         Account: {acc.account_number}
