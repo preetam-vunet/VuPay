@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
 
 const taglineOptions = [
   "Your money, managed your way.",
@@ -15,6 +16,7 @@ const taglineOptions = [
 export default function Home() {
   const [currentTaglineIndex, setCurrentTaglineIndex] = useState(0);
   const [fade, setFade] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,7 +53,10 @@ export default function Home() {
                   </span>
                 ))}
               </div>
-              <button className={styles.starterButton}>Get Started</button>
+              <button
+                onClick={() => router.push("/login")}
+                className={styles.starterButton}
+              >Get Started</button>
             </div>
           </div>
           <div className={styles.imageContainer}>

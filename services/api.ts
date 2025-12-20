@@ -122,7 +122,7 @@ export const initiatePayment = async (token: string, paymentData: any) => {
 
 export const verifyAccountPassword = async (phone_number: string, account_number: string, account_password: string, token: string) => {
     try {
-        const response = await fetch("https://216.48.191.10:8443/password/verify-account", {
+        const response = await fetch("https://216.48.191.10:8443/auth/verify-payment", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

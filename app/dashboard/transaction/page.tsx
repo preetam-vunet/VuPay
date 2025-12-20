@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { initiatePayment, verifyAccountPassword, verifyOtp } from "../../../services/api";
 import styles from "./page.module.css";
@@ -79,12 +80,22 @@ export default function TransactionPage() {
 
         const result = await verifyAccountPassword(phoneNumber, account.account_number, password, token);
 
-        if (result.success && result.data?.transaction_id) {
-            setTransactionId(result.data.transaction_id);
-            setStep("otp");
-            setMessage("Password verified. OTP sent.");
+        if (result.success) {
+            // If transaction_id is present, use it. If not, we might still want to proceed 
+            // if the user expects an OTP flow. However, without a transaction_id, 
+            // the OTP page might not work unless it handles missing IDs or uses a different mechanism.
+            // For now, based on user request, we will route to the OTP page.
+            // We'll store the transaction ID (if any) or context in localStorage if needed by the other page.
+
+            if (result.data?.transaction_id) {
+                localStorage.setItem("currentTransactionId", result.data.transaction_id);
+            }
+
+            // Redirect to the dedicated OTP verification page
+            router.push("/otp-verification");
+            return;
         } else {
-            setMessage(result.message || "Password verification failed.");
+            setMessage(result.data?.message || result.message || "Password verification failed.");
         }
         setIsLoading(false);
     };
@@ -192,9 +203,6 @@ export default function TransactionPage() {
 
     const renderStepPassword = () => (
         <form onSubmit={handlePasswordSubmit} className={styles.form}>
-            <div className={styles.subtitle} style={{ marginBottom: "10px" }}>
-                Verify Account Ownership
-            </div>
             <div className={styles.inputGroup}>
                 <div className={styles.label}>Account Password</div>
                 <input
@@ -247,28 +255,54 @@ export default function TransactionPage() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.card}>
-                <div className={styles.title}>Make Transaction</div>
-                <div className={styles.subtitle}>
-                    {step === 'details' && "Enter details for digital transfer"}
-                    {step === 'password' && "Security Verification"}
-                    {step === 'otp' && "Final Confirmation"}
+            <div className={styles.loginContainer}>
+                <div className={styles.loginForm}>
+                    <div className={styles.title}>Make Transaction</div>
+                    <div className={styles.subtitle}>
+                        {step === 'details' && "Enter details for digital transfer"}
+                        {step === 'password' && "Verify Account Ownership"}
+                        {step === 'otp' && "Final Confirmation"}
+                    </div>
+
+                    {step === 'details' && renderStepDetails()}
+                    {step === 'password' && renderStepPassword()}
+                    {step === 'otp' && renderStepOtp()}
+
+                    {message && <div className={styles.message} style={{ color: message.toLowerCase().includes("success") ? "green" : "red" }}>{message}</div>}
+
+                    <button
+                        type="button"
+                        className={styles.button}
+                        onClick={() => router.push("/dashboard")}
+                        style={{
+                            background: "transparent",
+                            color: "var(--text-color-2)",
+                            border: "1px solid var(--text-color-2)",
+                            fontSize: "16px",
+                            marginTop: "10px",
+                            width: "auto",
+                            padding: "8px 20px"
+                        }}
+                    >
+                        Cancel Transaction
+                    </button>
                 </div>
-
-                {step === 'details' && renderStepDetails()}
-                {step === 'password' && renderStepPassword()}
-                {step === 'otp' && renderStepOtp()}
-
-                {message && <div className={styles.message} style={{ color: message.toLowerCase().includes("success") ? "green" : "red" }}>{message}</div>}
-
-                <button
-                    type="button"
-                    className={styles.button}
-                    onClick={() => router.push("/dashboard")}
-                    style={{ background: "transparent", color: "var(--text-color-2)", border: "1px solid var(--text-color-2)", fontSize: "16px", marginTop: "10px" }}
-                >
-                    Cancel
-                </button>
+            </div>
+            <div className={styles.view}>
+                <div className={styles.viewTitle}>Lightning-Fast Transactions</div>
+                <div className={styles.viewSubtitle}>
+                    Experience instant transfers and real-time processing, so your money moves as fast as you do. <br />
+                    Send and receive money in seconds with minimal waiting and maximum reliability.
+                </div>
+                <div className={styles.viewBody}>
+                    <Image
+                        src="/transaction.png"
+                        alt="Logo"
+                        fill
+                        style={{ objectFit: "contain" }}
+                        priority
+                    />
+                </div>
             </div>
         </div>
     );

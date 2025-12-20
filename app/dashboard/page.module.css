@@ -25,10 +25,10 @@
 }
 
 .logoText {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
     color: var(--text-color-2);
-    font-family: var(--font-noto-serif);
+    /* font-family: var(--font-noto-serif); */
 }
 
 .nav {
@@ -41,7 +41,7 @@
     padding: 12px 15px;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
     color: var(--text-color-2);
     opacity: 0.7;
     transition: all 0.2s;
@@ -54,33 +54,89 @@
 }
 
 .activeNavItem {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #dedede;
     /* Or appropriate active color based on theme */
     opacity: 1;
     font-weight: 600;
+    color: black;
     /* border-left: 3px solid var(--text-color-2); */
 }
 
 .mainContent {
     flex: 1;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
+    background-color: #dedede;
+    overflow-y: auto;
+}
+
+.topBar {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: var(--background-color);
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    /* optional separator */
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.05); */
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: black;
+    /* Using the dark color if text-color-1 is light */
+    /* font-family: var(--font-noto-serif); */
+    text-transform: capitalize;
+}
+
+.topBarIcons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.iconButton {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--login-background-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.iconButton:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* Existing Card Styles reused */
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    width: 100%;
+}
+
+.cardTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color-2);
+    margin-bottom: 10px;
+}
+
 .card {
     background: var(--login-background-color);
-    padding: 40px;
+    padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
+    height: max-content;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
 .header {
@@ -98,7 +154,7 @@
     font-size: 32px;
     font-weight: 600;
     color: var(--text-color-2);
-    font-family: var(--font-noto-serif);
+    /* font-family: var(--font-noto-serif); */
 }
 
 .balanceCard {
@@ -112,9 +168,9 @@
 }
 
 .balanceLabel {
-    font-size: 14px;
+    font-size: 20px;
     opacity: 0.8;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .balanceRow {
@@ -148,7 +204,7 @@
 }
 
 .accountNumber {
-    font-size: 16px;
+    font-size: 20px;
     opacity: 0.8;
     letter-spacing: 1px;
 }

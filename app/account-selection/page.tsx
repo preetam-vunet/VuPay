@@ -112,8 +112,19 @@ export default function AccountSelectionPage() {
                 </div>
             </div>
             <div className={styles.view}>
+                <div className={styles.viewTitle}>Seamless Cross-Platform Access</div>
+                <div className={styles.viewSubtitle}>
+                    Use VuPay anytime, anywhere—on mobile or web. Your account stays perfectly in sync across all your devices. <br />
+                    Enjoy a smooth, unified banking experience across platforms without missing a beat.
+                </div>
                 <div className={styles.viewBody}>
-                    {/* Image similar to login/otp */}
+                    <Image
+                        src="/accountSelection.png"
+                        alt="Logo"
+                        fill
+                        style={{ objectFit: "contain" }}
+                        priority
+                    />
                 </div>
             </div>
         </div>

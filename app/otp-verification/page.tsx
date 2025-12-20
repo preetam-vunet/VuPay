@@ -148,15 +148,19 @@ export default function OtpPage() {
                 </div>
             </div>
             <div className={styles.view}>
+                <div className={styles.viewTitle}>Security You Can Trust</div>
+                <div className={styles.viewSubtitle}>
+                    Built with strong protection layers to keep your money and personal information safe at all times. <br />
+                    Every transaction is secured using industry-leading security standards to ensure complete peace of mind.
+                </div>
                 <div className={styles.viewBody}>
-                    {/* <Image
-                        src="/phone.png"
-                        alt="Login Visual"
-                        className={styles.image}
+                    <Image
+                        src="/otpImage.png"
+                        alt="Logo"
+                        fill
+                        style={{ objectFit: "contain" }}
                         priority
-                        width={1000}
-                        height={1000}
-                    /> */}
+                    />
                 </div>
             </div>
         </div>

@@ -75,15 +75,19 @@ export default function LoginPage() {
         </div>
       </div>
       <div className={styles.view}>
+        <div className={styles.viewTitle}>Your dashboard at a glance</div>
+        <div className={styles.viewSubtitle}>
+          Track balances, recent transactions, and manage your money effortlessly. <br />
+          Get real-time updates, quick actions, and a clear view of your finances—all in one place.
+        </div>
         <div className={styles.viewBody}>
-          {/* <Image
-            src="/TwoPhones.png"
-            alt="Login Visual"
-            className={styles.image}
+          <Image
+            src="/dashboard3.png"
+            alt="Logo"
+            fill
+            style={{ objectFit: "contain" }}
             priority
-            width={100}
-            height={100}
-          /> */}
+          />
         </div>
       </div>
     </div>
